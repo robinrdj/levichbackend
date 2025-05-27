@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get("/", async (req, res) => {
-  res.send("typical backend response");
+  res.send("Backend is running");
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/comments", commentRoutes);
