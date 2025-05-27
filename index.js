@@ -12,9 +12,9 @@ app.use(
     origin: function (origin, callback) {
       const allowedOrigins = [
         "http://localhost:3000",
-        "https://levichfrontend.vercel.app/",
+        "https://levichfrontend.vercel.app",
       ];
-      if (allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
