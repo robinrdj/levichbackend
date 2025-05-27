@@ -24,7 +24,7 @@ const generateTokens = (user) => {
     permissions: user.permissions,
   };
   const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET, {
-    expiresIn: "7d",
+    expiresIn: "1d",
   });
   const refreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_SECRET, {
     expiresIn: "30d",
@@ -58,15 +58,12 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user || !(await bcrypt.compare(password, user.password)))
       return res.status(401).json({ error: "Invalid credentials" });
-
     if (!user.permissions || user.permissions.length === 0) {
       user.permissions = ["read", "write"];
     }
-
     const { accessToken, refreshToken } = generateTokens(user);
     user.refreshToken = refreshToken;
     await user.save();
-
     res.cookie("refreshToken", refreshToken, { httpOnly: true });
     res.json({ accessToken, user });
   } catch (err) {
@@ -146,8 +143,7 @@ router.post("/forgot", async (req, res) => {
       }
     );
     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-    // TODO: Integrate with nodemailer to send `resetLink`
-    console.log("Reset Link:", resetLink); // For dev use
+    console.log("Reset Link:", resetLink); 
     res.json({ message: "Reset link generated", token });
   } catch (err) {
     console.error("Forgot Password Error:", err);

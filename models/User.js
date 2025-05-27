@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     enum: ["guest", "user", "admin"],
     default: "guest",
   },
-  permissions: [String], // We'll keep this in sync with role
+  permissions: [String],
   refreshToken: String,
 });
 
